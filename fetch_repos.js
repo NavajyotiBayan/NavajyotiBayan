@@ -1,63 +1,181 @@
 const fs = require("fs");
 
 const USERNAME = "NavajyotiBayan";
-const README = "README.md";
+const README_FILE = "README.md";
 
-async function main() {
-    const response = await fetch(
-        `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`
-    );
+const START_MARKER = "<!-- AUTO-REPO-LIST:START -->";
+const END_MARKER = "<!-- AUTO-REPO-LIST:END -->";
+
+const QUERY = `
+query($login: String!) {
+  user(login: $login) {
+    pinnedItems(first: 6, types: REPOSITORY) {
+      nodes {
+        ... on Repository {
+          name
+          description
+          url
+          stargazerCount
+          forkCount
+          primaryLanguage {
+            name
+          }
+          isArchived
+          isFork
+        }
+      }
+    }
+  }
+}
+`;
+
+async function getPinnedRepositories() {
+    const response = await fetch("https://api.github.com/graphql", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${process.env.GITHUB_TOKEN}`,
+            "Content-Type": "application/json",
+            "User-Agent": "NavajyotiBayan-Profile-README"
+        },
+        body: JSON.stringify({
+            query: QUERY,
+            variables: {
+                login: USERNAME
+            }
+        })
+    });
 
     if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.status}`);
+        throw new Error(
+            `GitHub API request failed: ${response.status} ${response.statusText}`
+        );
     }
 
-    const repos = await response.json();
+    const result = await response.json();
 
-    const projects = repos
-        .filter(repo => !repo.fork && repo.name !== USERNAME)
-        .sort((a, b) => {
-            const stars = b.stargazers_count - a.stargazers_count;
+    if (result.errors) {
+        console.error(JSON.stringify(result.errors, null, 2));
+        throw new Error("GitHub GraphQL returned an error.");
+    }
 
-            if (stars !== 0) return stars;
+    return result.data.user.pinnedItems.nodes.filter(
+        repo => repo && !repo.isFork
+    );
+}
 
-            return new Date(b.updated_at) - new Date(a.updated_at);
-        })
-        .slice(0, 6);
+function escapeHtml(text = "") {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
 
-    const content = projects.map(repo => {
+function createProjectCards(repositories) {
+    if (repositories.length === 0) {
+        return `
+<div align="center">
+
+_No repositories are currently pinned on my GitHub profile._
+
+</div>
+`;
+    }
+
+    const cards = repositories.map((repo, index) => {
         const description =
-            repo.description || "A personal project and experiment.";
+            escapeHtml(repo.description || "Personal project and experiment.");
 
-        return `### [${repo.name}](${repo.html_url})
+        const language =
+            repo.primaryLanguage?.name || "Code";
+
+        const stars = repo.stargazerCount;
+        const forks = repo.forkCount;
+
+        return `
+<td width="50%" valign="top">
+
+### 📦 [${escapeHtml(repo.name)}](${repo.url})
 
 ${description}
 
-\`${repo.language || "Code"}\` · ⭐ ${repo.stargazers_count}`;
-    }).join("\n\n");
+\`${language}\` · ⭐ ${stars} · 🍴 ${forks}
 
-    let readme = fs.readFileSync(README, "utf8");
+</td>
+`;
+    });
 
-    const start = "<!-- AUTO-REPO-LIST:START -->";
-    const end = "<!-- AUTO-REPO-LIST:END -->";
+    const rows = [];
 
-    const startIndex = readme.indexOf(start);
-    const endIndex = readme.indexOf(end);
+    for (let i = 0; i < cards.length; i += 2) {
+        const left = cards[i];
+        const right = cards[i + 1] || `
+<td width="50%" valign="top"></td>
+`;
 
-    if (startIndex === -1 || endIndex === -1) {
-        throw new Error("README markers not found.");
+        rows.push(`
+<tr>
+${left}
+${right}
+</tr>
+`);
     }
 
-    const updated =
-        readme.slice(0, startIndex + start.length) +
-        "\n\n" +
-        content +
-        "\n\n" +
-        readme.slice(endIndex);
+    return `
+<table>
+${rows.join("\n")}
+</table>
+`;
+}
 
-    fs.writeFileSync(README, updated);
+function updateReadme(content) {
+    const readme = fs.readFileSync(README_FILE, "utf8");
 
-    console.log(`Updated ${projects.length} repositories.`);
+    const startIndex = readme.indexOf(START_MARKER);
+    const endIndex = readme.indexOf(END_MARKER);
+
+    if (startIndex === -1 || endIndex === -1) {
+        throw new Error(
+            "README markers not found. Add AUTO-REPO-LIST markers first."
+        );
+    }
+
+    if (endIndex < startIndex) {
+        throw new Error("README markers are in the wrong order.");
+    }
+
+    const before = readme.slice(
+        0,
+        startIndex + START_MARKER.length
+    );
+
+    const after = readme.slice(endIndex);
+
+    const updatedReadme =
+        `${before}\n\n${content}\n\n${after}`;
+
+    fs.writeFileSync(
+        README_FILE,
+        updatedReadme,
+        "utf8"
+    );
+}
+
+async function main() {
+    console.log(`Fetching pinned repositories for ${USERNAME}...`);
+
+    const repositories = await getPinnedRepositories();
+
+    console.log(`Found ${repositories.length} pinned repositories.`);
+
+    repositories.forEach((repo, index) => {
+        console.log(`${index + 1}. ${repo.name}`);
+    });
+
+    const projectCards = createProjectCards(repositories);
+
+    updateReadme(projectCards);
+
+    console.log("README.md updated successfully.");
 }
 
 main().catch(error => {
