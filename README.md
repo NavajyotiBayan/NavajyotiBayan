@@ -31,7 +31,36 @@ My GitHub is a collection of those experiments, tools, and things I'm learning a
 
 <!-- AUTO-REPO-LIST:START -->
 
-<!-- This section is automatically generated from my GitHub pinned repositories. -->
+
+<table>
+
+<tr>
+
+<td width="50%" valign="top">
+
+### 📦 [IDM-Tool](https://github.com/NavajyotiBayan/IDM-Tool)
+
+Personal project and experiment.
+
+`PowerShell` · ⭐ 0 · 🍴 0
+
+</td>
+
+
+<td width="50%" valign="top">
+
+### 📦 [G-Takeout-Tools](https://github.com/NavajyotiBayan/G-Takeout-Tools)
+
+Modern Windows 11 utility for fixing Google Takeout media timestamps
+
+`PowerShell` · ⭐ 0 · 🍴 0
+
+</td>
+
+</tr>
+
+</table>
+
 
 <!-- AUTO-REPO-LIST:END -->
 
