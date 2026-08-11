@@ -1,7 +1,8 @@
-name: Update Profile README
+name: Update Featured Projects
 
 on:
   schedule:
+    # Runs every day at 00:00 UTC
     - cron: "0 0 * * *"
 
   workflow_dispatch:
@@ -11,10 +12,11 @@ permissions:
 
 jobs:
   update-readme:
+    name: Sync GitHub Pinned Repositories
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout profile repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -22,10 +24,12 @@ jobs:
         with:
           node-version: 20
 
-      - name: Update repositories
+      - name: Update featured projects
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node fetch_repos.js
 
-      - name: Commit changes
+      - name: Commit README changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -33,8 +37,8 @@ jobs:
           git add README.md
 
           if git diff --cached --quiet; then
-            echo "No changes."
+            echo "No changes detected."
           else
-            git commit -m "chore: update profile projects"
+            git commit -m "chore: sync pinned projects"
             git push
           fi
