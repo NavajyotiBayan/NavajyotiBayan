@@ -64,9 +64,6 @@ Modern Windows 11 utility for fixing Google Takeout media timestamps
 
 <!-- AUTO-REPO-LIST:END -->
 
-> Projects shown above are controlled by my **GitHub profile pins**.  
-> Pin or unpin repositories on my profile to change what I showcase.
-
 ---
 
 ## ⚡ What I'm Exploring
