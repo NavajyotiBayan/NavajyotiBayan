@@ -1,16 +1,16 @@
 <div align="center">
 
-# 👋 Hi, I'm Navajyoti
+<img src="https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" width="420">
+
+# 👋 Hey, I'm Navajyoti
 
 ### Creative Freelancer · AI Explorer · Vibe Coder
 
-*Learning technology by building the things I want to use.*
+**I learn by building things I actually want to use.**
 
 <br>
 
-[![GitHub](https://img.shields.io/badge/GitHub-NavajyotiBayan-181717?style=flat-square&logo=github)](https://github.com/NavajyotiBayan)
-[![AI](https://img.shields.io/badge/AI-Explorer-8A2BE2?style=flat-square)](#)
-[![Windows](https://img.shields.io/badge/Windows-Tools-0078D4?style=flat-square&logo=windows)](#)
+<img src="https://komarev.com/ghpvc/?username=NavajyotiBayan&label=Profile%20Views&color=6C63FF&style=for-the-badge" />
 
 </div>
 
@@ -18,22 +18,23 @@
 
 ## 🧭 About Me
 
-I'm a **creative freelancer** with a background in Political Science who became interested in computers, AI, and technology.
+I'm a **creative freelancer** with a background in Political Science who became deeply interested in computers, AI, and technology.
 
-I'm not a formally trained software developer. I learn mainly by **experimenting, asking questions, using AI as a coding partner, and building practical tools for myself**.
+I'm not a formally trained software developer. Most of what I know comes from **self-learning, experimentation, AI-assisted coding, troubleshooting, and building tools for my own needs.**
 
-Most of my projects start with a simple idea:
-
-> **"Can I build something that makes this easier?"**
-
----
-
-## ⚡ What I'm Exploring
+My usual workflow:
 
 ```text
-🤖 AI-assisted development
-🪟 Windows utilities
-⚙️ PowerShell & automation
-🎨 UI/UX & desktop applications
-🧩 Practical productivity tools
-💻 Technology & experimentation
+💡 Problem
+   ↓
+🤔 Idea
+   ↓
+🤖 AI + Research
+   ↓
+💻 Build
+   ↓
+🐛 Break
+   ↓
+🔧 Fix
+   ↓
+🚀 Improve
