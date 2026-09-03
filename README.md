@@ -30,48 +30,44 @@
 
 <!-- AUTO-REPO-LIST:START -->
 
-<table>
+<table width="100%" border="1" cellpadding="10" cellspacing="0">
+<tr><td colspan="2"><sub>● ● ●</sub> &nbsp; <code>Navajyoti@github:~$ pinned --list</code></td></tr>
 <tr>
 <td width="50%" valign="top">
 
-### <a href="https://github.com/NavajyotiBayan/G-Takeout-Tools">G-Takeout-Tools</a>
+**<a href="https://github.com/NavajyotiBayan/G-Takeout-Tools">[01] G-Takeout-Tools</a>**
 
 Modern Windows 11 utility for fixing Google Takeout media timestamps
 
 <sub>`PowerShell`</sub>
 
-<br>
-
-⭐ 0 &nbsp; · &nbsp; 🍴 0
+⭐ 0 &nbsp;·&nbsp; 🍴 0
 
 </td>
 <td width="50%" valign="top">
 
-### <a href="https://github.com/NavajyotiBayan/IDM-Tool">IDM-Tool</a>
+**<a href="https://github.com/NavajyotiBayan/IDM-Tool">[02] IDM-Tool</a>**
 
 No description provided.
 
 <sub>`PowerShell`</sub>
 
-<br>
-
-⭐ 0 &nbsp; · &nbsp; 🍴 0
+⭐ 0 &nbsp;·&nbsp; 🍴 0
 
 </td></tr>
 <tr>
 <td width="50%" valign="top">
 
-### <a href="https://github.com/NavajyotiBayan/MIMI-Baby-Studio">MIMI-Baby-Studio</a>
+**<a href="https://github.com/NavajyotiBayan/MIMI-Baby-Studio">[03] MIMI-Baby-Studio</a>**
 
 Private, local Windows productivity studio for converting videos and images into PDF documents
 
 <sub>`JavaScript`</sub>
 
-<br>
-
-⭐ 0 &nbsp; · &nbsp; 🍴 0
+⭐ 0 &nbsp;·&nbsp; 🍴 0
 
 </td><td width="50%"></td></tr>
+<tr><td colspan="2"><sub><code>Navajyoti@github:~$ _</code></sub></td></tr>
 </table>
 <!-- AUTO-REPO-LIST:END -->
 
