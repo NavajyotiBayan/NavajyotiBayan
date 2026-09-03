@@ -58,7 +58,7 @@ async function fetchPinnedRepositories() {
     throw new Error(data.errors.map(error => error.message).join("\n"));
   }
 
-  return data.data.user.pinnedItems.nodes;
+  return (data.data.user.pinnedItems?.nodes ?? []).filter(Boolean);
 }
 
 function escapeHtml(value = "") {
@@ -138,7 +138,7 @@ function updateReadme(repositories) {
 
   if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
     throw new Error(
-      `Could not find ${START} and ${END} markers in ${content}.`
+      `Could not find ${START} and ${END} markers in ${README}.`
     );
   }
 
@@ -165,7 +165,7 @@ async function main() {
     repositories.map(repo => repo.name).join(", ") || "none"
   );
 
-  updateReadme(README);
+  updateReadme(repositories);
 
   console.log("README.md updated successfully.");
 }
