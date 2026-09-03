@@ -1,7 +1,10 @@
 const fs = require("fs");
 
 const USERNAME = "NavajyotiBayan";
-const SVG_FILE = "assets/profile-terminal.svg";
+const README_FILE = "README.md";
+
+const START_MARKER = "<!-- AUTO-REPO-LIST:START -->";
+const END_MARKER = "<!-- AUTO-REPO-LIST:END -->";
 
 const QUERY = `
 query($login: String!) {
@@ -51,115 +54,95 @@ async function getPinnedRepositories() {
     return result.data.user.pinnedItems.nodes.filter(repo => repo && !repo.isFork);
 }
 
-function esc(value = "") {
+function escapeMarkdown(value = "") {
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;");
+        .replace(/\\/g, "\\\\")
+        .replace(/`/g, "\\`");
 }
 
-function wrapText(text, maxChars = 42, maxLines = 3) {
+function wrapDescription(text, max = 48) {
     const words = String(text || "Personal project and experiment.").split(/\s+/);
     const lines = [];
     let line = "";
 
     for (const word of words) {
-        const candidate = line ? `${line} ${word}` : word;
-        if (candidate.length > maxChars && line) {
+        const next = line ? `${line} ${word}` : word;
+        if (next.length > max && line) {
             lines.push(line);
             line = word;
         } else {
-            line = candidate;
+            line = next;
         }
     }
 
     if (line) lines.push(line);
-    return lines.slice(0, maxLines);
+    return lines.slice(0, 3);
 }
 
-function projectCard(repo, x, y, width, height, number) {
-    const lines = wrapText(repo.description);
-    const desc = lines.map((line, i) =>
-        `<text x="${x + 28}" y="${y + 88 + i * 20}" class="desc">${esc(line)}</text>`
-    ).join("");
-
-    return `
-    <a href="${esc(repo.url)}" target="_blank">
-      <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="12" class="card"/>
-      <text x="${x + 28}" y="${y + 38}" class="prompt">$ ${number}.</text>
-      <text x="${x + 54}" y="${y + 38}" class="project">${esc(repo.name)}</text>
-      ${desc}
-      <text x="${x + 28}" y="${y + height - 28}" class="meta">${esc(repo.primaryLanguage?.name || "Code")}</text>
-      <text x="${x + width - 128}" y="${y + height - 28}" class="meta">★ ${repo.stargazerCount}</text>
-      <text x="${x + width - 68}" y="${y + height - 28}" class="meta">⑂ ${repo.forkCount}</text>
-    </a>`;
-}
-
-function buildProjects(repositories) {
-    const positions = [
-        [585, 405],
-        [585, 625],
-        [585, 845],
-        [585, 1065]
-    ];
-
+function createProjectTable(repositories) {
     if (!repositories.length) {
         return `
-        <rect x="585" y="405" width="555" height="185" rx="12" class="card"/>
-        <text x="613" y="490" class="desc">No pinned repositories found.</text>
-        <text x="613" y="530" class="meta">Pin repositories on GitHub to populate this panel.</text>`;
+<div align="center">
+
+\`No repositories are currently pinned on my GitHub profile.\`
+
+</div>`;
     }
 
-    return repositories.slice(0, 4).map((repo, i) =>
-        projectCard(repo, positions[i][0], positions[i][1], 555, 185, i + 1)
-    ).join("\n");
+    return `
+<table>
+${repositories.slice(0, 4).map((repo, index) => {
+        const descriptionLines = wrapDescription(repo.description);
+        const description = descriptionLines.join("\n");
+
+        return `<tr>
+<td>
+
+\`\`\`text
+$ ${index + 1}. ${escapeMarkdown(repo.name)}
+
+${description}
+
+${repo.primaryLanguage?.name || "Code"}   ★ ${repo.stargazerCount}   ⑂ ${repo.forkCount}
+\`\`\`
+
+**[→ View Repository](${repo.url})**
+
+</td>
+</tr>`;
+    }).join("\n")}
+</table>`;
 }
 
-function updateSvg(repositories) {
-    let svg = fs.readFileSync(SVG_FILE, "utf8");
+function updateReadme(projectTable) {
+    const readme = fs.readFileSync(README_FILE, "utf8");
+    const start = readme.indexOf(START_MARKER);
+    const end = readme.indexOf(END_MARKER);
 
-    const start = svg.indexOf("<!-- AUTO_PROJECTS_START -->");
-    const end = svg.indexOf("<!-- AUTO_PROJECTS_END -->");
-
-    if (start !== -1 && end !== -1) {
-        const replacement = `<!-- AUTO_PROJECTS_START -->\n${buildProjects(repositories)}\n<!-- AUTO_PROJECTS_END -->`;
-        svg = svg.slice(0, start) + replacement + svg.slice(end + "<!-- AUTO_PROJECTS_END -->".length);
-        fs.writeFileSync(SVG_FILE, svg, "utf8");
-        return;
+    if (start === -1 || end === -1 || end < start) {
+        throw new Error("README project markers are missing or invalid.");
     }
 
-    // Initial template uses the project area directly; replace the card region
-    // between the project heading and the bottom learning section.
-    const projectHeading = '<text x="850" y="308" class="command">ls ~/featured-projects</text>';
-    const bottomLine = '<!-- bottom learning process -->';
+    const before = readme.slice(0, start + START_MARKER.length);
+    const after = readme.slice(end);
 
-    const start2 = svg.indexOf(projectHeading);
-    const end2 = svg.indexOf(bottomLine);
-
-    if (start2 === -1 || end2 === -1) {
-        throw new Error("Could not locate project section in profile-terminal.svg.");
-    }
-
-    const before = svg.slice(0, start2 + projectHeading.length);
-    const after = svg.slice(end2);
-
-    svg = `${before}\n<!-- AUTO_PROJECTS_START -->\n${buildProjects(repositories)}\n<!-- AUTO_PROJECTS_END -->\n\n${after}`;
-    fs.writeFileSync(SVG_FILE, svg, "utf8");
+    fs.writeFileSync(
+        README_FILE,
+        `${before}\n\n${projectTable}\n\n${after}`,
+        "utf8"
+    );
 }
 
 async function main() {
     console.log(`Fetching pinned repositories for ${USERNAME}...`);
+
     const repositories = await getPinnedRepositories();
+
     console.log(`Found ${repositories.length} pinned repositories.`);
 
-    repositories.forEach((repo, index) => {
-        console.log(`${index + 1}. ${repo.name}`);
-    });
+    updateReadme(createProjectTable(repositories));
 
-    updateSvg(repositories);
-    console.log(`${SVG_FILE} updated successfully.`);
+    console.log("README.md updated successfully.");
 }
 
 main().catch(error => {
