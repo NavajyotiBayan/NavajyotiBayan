@@ -1,7 +1,19 @@
-# Neon Cyber Terminal
+# Neon Cyber Terminal Profile
 
-This version deliberately uses GitHub-rendered Markdown/HTML rather than making the whole README a single image.
+Replace these files in the `NavajyotiBayan` profile repository:
 
-GitHub does not permit arbitrary CSS/JavaScript in profile README files, so a pixel-perfect clone of a web terminal UI is not possible. This package recreates the neon-cyber look using supported README elements, with a small animated typing header and dynamic pinned-project synchronization.
+- `README.md`
+- `fetch_repos.js`
+- `.github/workflows/update-readme.yml`
 
-Replace the files in the NavajyotiBayan profile repository, then commit and push with GitHub Desktop.
+This version intentionally does NOT use fenced code blocks for the visual UI. That avoids GitHub's large gray code-block presentation and copy buttons.
+
+The terminal look is created from GitHub-supported HTML/Markdown elements, badges, tables, and an external animated typing header.
+
+The Featured Projects section is generated from your GitHub pinned repositories by `fetch_repos.js`.
+
+After pushing with GitHub Desktop, you can manually run:
+
+GitHub repository → Actions → Update Featured Projects → Run workflow
+
+The scheduled workflow also refreshes the pinned-project section daily.

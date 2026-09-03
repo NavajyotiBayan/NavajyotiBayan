@@ -41,9 +41,7 @@ async function getPinnedRepositories() {
     });
 
     if (!response.ok) {
-        throw new Error(
-            `GitHub API request failed: ${response.status} ${response.statusText}`
-        );
+        throw new Error(`GitHub API request failed: ${response.status} ${response.statusText}`);
     }
 
     const result = await response.json();
@@ -58,7 +56,7 @@ async function getPinnedRepositories() {
     );
 }
 
-function safe(value = "") {
+function escapeMarkdown(value = "") {
     return String(value)
         .replace(/\\/g, "\\\\")
         .replace(/`/g, "\\`")
@@ -69,33 +67,35 @@ function createProjectTable(repositories) {
     if (!repositories.length) {
         return `
 <div align="center">
-
-\`No repositories are currently pinned.\`
-
+<sub>NO PINNED REPOSITORIES FOUND</sub>
 </div>`;
     }
 
     return `
 <table>
-${repositories.slice(0, 4).map((repo, index) => {
-        const name = safe(repo.name);
-        const description = safe(
+${repositories.slice(0, 4).map((repo) => {
+        const name = escapeMarkdown(repo.name);
+        const description = escapeMarkdown(
             repo.description || "Personal project and experiment."
         );
-        const language = safe(
+        const language = escapeMarkdown(
             repo.primaryLanguage?.name || "Code"
         );
 
         return `<tr>
 <td>
 
-### \`> ${name}\`
+<h3><samp>› ${name}</samp></h3>
 
 ${description}
 
-\`${language}\` · \`★ ${repo.stargazerCount}\` · \`⑂ ${repo.forkCount}\`
+<code>${language}</code>
+&nbsp; <samp>★ ${repo.stargazerCount}</samp>
+&nbsp; <samp>⑂ ${repo.forkCount}</samp>
 
-**[OPEN PROJECT →](${repo.url})**
+<br><br>
+
+<a href="${repo.url}"><b>OPEN PROJECT →</b></a>
 
 </td>
 </tr>`;
@@ -105,7 +105,6 @@ ${description}
 
 function updateReadme(projects) {
     const readme = fs.readFileSync(README_FILE, "utf8");
-
     const start = readme.indexOf(START_MARKER);
     const end = readme.indexOf(END_MARKER);
 
@@ -125,9 +124,7 @@ function updateReadme(projects) {
 
 async function main() {
     console.log(`Fetching pinned repositories for ${USERNAME}...`);
-
     const repositories = await getPinnedRepositories();
-
     console.log(`Found ${repositories.length} pinned repositories.`);
 
     updateReadme(createProjectTable(repositories));
