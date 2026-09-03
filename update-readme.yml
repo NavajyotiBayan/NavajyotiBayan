@@ -2,7 +2,9 @@ name: Update Featured Projects
 
 on:
   schedule:
+    # Runs every day at 00:00 UTC
     - cron: "0 0 * * *"
+
   workflow_dispatch:
 
 permissions:
@@ -10,6 +12,7 @@ permissions:
 
 jobs:
   update-readme:
+    name: Sync GitHub Pinned Repositories
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +24,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Sync pinned repositories
+      - name: Update featured projects
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node fetch_repos.js
