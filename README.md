@@ -16,11 +16,13 @@
 ## 🧭 About Me
 
 <p align="center">
-  <img
-    src="./assets/about-me.png"
-    alt="About Me"
-    width="900"
-  >
+  <picture>
+    <img
+      src="./assets/about-me.png"
+      alt="About Me"
+      width="100%"
+    >
+  </picture>
 </p>
 
 ---
