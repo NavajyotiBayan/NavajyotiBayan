@@ -74,8 +74,9 @@ function renderRepository(repo) {
     repo.description?.trim() || "No description provided.";
 
   const language = repo.primaryLanguage?.name || "GitHub";
-  const topics = repo.repositoryTopics.nodes
-    .map(({ topic }) => topic.name)
+  const topics = (repo.repositoryTopics?.nodes ?? [])
+    .map(({ topic }) => topic?.name)
+    .filter(Boolean)
     .slice(0, 4);
 
   const topicLine = topics.length
