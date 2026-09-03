@@ -129,8 +129,8 @@ ${rows.join("\n")}
 </table>`;
 }
 
-function updateReadme(content) {
-  const readme = fs.readFileSync(content, "utf8");
+function updateReadme(repositories) {
+  const readme = fs.readFileSync(README, "utf8");
 
   const startIndex = readme.indexOf(START);
   const endIndex = readme.indexOf(END);
@@ -141,13 +141,13 @@ function updateReadme(content) {
     );
   }
 
-  const generated = renderFeaturedProjects(content);
+  const generated = renderFeaturedProjects(repositories);
   const before = readme.slice(0, startIndex + START.length);
   const after = readme.slice(endIndex);
 
   const updated = `${before}\n${generated}\n${after}`;
 
-  fs.writeFileSync(content, updated, "utf8");
+  fs.writeFileSync(README, updated, "utf8");
 }
 
 async function main() {
