@@ -13,7 +13,6 @@
 
 ---
 
-## 🧭 About Me
 
 <p align="center">
   <picture>
@@ -94,9 +93,11 @@ I'm particularly interested in **AI-assisted development** — using AI not only
 ## 🧠 How I Learn
 
 <p align="center">
-  <img
-    src="./assets/learning-process.png"
-    alt="My learning process"
-    width="900"
-  >
+  <picture>
+    <img
+      src="./assets/learning-process.png"
+      alt="About Me"
+      width="100%"
+    >
+  </picture>
 </p>
