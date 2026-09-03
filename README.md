@@ -157,9 +157,6 @@ No description provided.
 </table>
 <!-- AUTO-REPO-LIST:END -->
 
-> Projects shown above are controlled by my **GitHub profile pins**.  
-> Pin or unpin repositories on my profile to change what I showcase.
-
 ---
 
 ## ⚡ What I'm Exploring
@@ -177,19 +174,10 @@ I'm particularly interested in **AI-assisted development** — using AI not only
 
 ## 🧠 How I Learn
 
-```text
-IDEA
-  ↓
-RESEARCH + AI
-  ↓
-EXPERIMENT
-  ↓
-BUILD
-  ↓
-BREAK
-  ↓
-FIX
-  ↓
-LEARN
-  ↓
-IMPROVE
+<p align="center">
+  <img
+    src="./assets/learning-process.png"
+    alt="My learning process"
+    width="900"
+  >
+</p>
