@@ -35,123 +35,42 @@ My GitHub is a collection of those experiments, tools, and things I'm learning a
 <tr>
 <td width="50%" valign="top">
 
-### <a href=""></a>
+### <a href="https://github.com/NavajyotiBayan/G-Takeout-Tools">G-Takeout-Tools</a>
 
-No description provided.
+Modern Windows 11 utility for fixing Google Takeout media timestamps
 
-<sub>`GitHub`</sub>
+<sub>`PowerShell`</sub>
 
 <br>
 
-⭐ undefined &nbsp; · &nbsp; 🍴 undefined
+⭐ 0 &nbsp; · &nbsp; 🍴 0
 
 </td>
 <td width="50%" valign="top">
 
-### <a href=""></a>
+### <a href="https://github.com/NavajyotiBayan/IDM-Tool">IDM-Tool</a>
 
 No description provided.
 
-<sub>`GitHub`</sub>
+<sub>`PowerShell`</sub>
 
 <br>
 
-⭐ undefined &nbsp; · &nbsp; 🍴 undefined
+⭐ 0 &nbsp; · &nbsp; 🍴 0
 
 </td></tr>
 <tr>
 <td width="50%" valign="top">
 
-### <a href=""></a>
+### <a href="https://github.com/NavajyotiBayan/MIMI-Baby-Studio">MIMI-Baby-Studio</a>
 
-No description provided.
+Private, local Windows productivity studio for converting videos and images into PDF documents
 
-<sub>`GitHub`</sub>
-
-<br>
-
-⭐ undefined &nbsp; · &nbsp; 🍴 undefined
-
-</td>
-<td width="50%" valign="top">
-
-### <a href=""></a>
-
-No description provided.
-
-<sub>`GitHub`</sub>
+<sub>`JavaScript`</sub>
 
 <br>
 
-⭐ undefined &nbsp; · &nbsp; 🍴 undefined
-
-</td></tr>
-<tr>
-<td width="50%" valign="top">
-
-### <a href=""></a>
-
-No description provided.
-
-<sub>`GitHub`</sub>
-
-<br>
-
-⭐ undefined &nbsp; · &nbsp; 🍴 undefined
-
-</td>
-<td width="50%" valign="top">
-
-### <a href=""></a>
-
-No description provided.
-
-<sub>`GitHub`</sub>
-
-<br>
-
-⭐ undefined &nbsp; · &nbsp; 🍴 undefined
-
-</td></tr>
-<tr>
-<td width="50%" valign="top">
-
-### <a href=""></a>
-
-No description provided.
-
-<sub>`GitHub`</sub>
-
-<br>
-
-⭐ undefined &nbsp; · &nbsp; 🍴 undefined
-
-</td>
-<td width="50%" valign="top">
-
-### <a href=""></a>
-
-No description provided.
-
-<sub>`GitHub`</sub>
-
-<br>
-
-⭐ undefined &nbsp; · &nbsp; 🍴 undefined
-
-</td></tr>
-<tr>
-<td width="50%" valign="top">
-
-### <a href=""></a>
-
-No description provided.
-
-<sub>`GitHub`</sub>
-
-<br>
-
-⭐ undefined &nbsp; · &nbsp; 🍴 undefined
+⭐ 0 &nbsp; · &nbsp; 🍴 0
 
 </td><td width="50%"></td></tr>
 </table>
