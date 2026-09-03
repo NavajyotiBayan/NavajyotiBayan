@@ -17,7 +17,9 @@ query($login: String!) {
           url
           stargazerCount
           forkCount
-          primaryLanguage { name }
+          primaryLanguage {
+            name
+          }
           isFork
         }
       }
@@ -41,7 +43,9 @@ async function getPinnedRepositories() {
     });
 
     if (!response.ok) {
-        throw new Error(`GitHub API request failed: ${response.status} ${response.statusText}`);
+        throw new Error(
+            `GitHub API request failed: ${response.status} ${response.statusText}`
+        );
     }
 
     const result = await response.json();
@@ -51,36 +55,20 @@ async function getPinnedRepositories() {
         throw new Error("GitHub GraphQL returned an error.");
     }
 
-    return result.data.user.pinnedItems.nodes.filter(repo => repo && !repo.isFork);
+    return result.data.user.pinnedItems.nodes.filter(
+        repo => repo && !repo.isFork
+    );
 }
 
-function escapeMarkdown(value = "") {
+function escapeText(value = "") {
     return String(value)
         .replace(/\\/g, "\\\\")
-        .replace(/`/g, "\\`");
-}
-
-function wrapDescription(text, max = 48) {
-    const words = String(text || "Personal project and experiment.").split(/\s+/);
-    const lines = [];
-    let line = "";
-
-    for (const word of words) {
-        const next = line ? `${line} ${word}` : word;
-        if (next.length > max && line) {
-            lines.push(line);
-            line = word;
-        } else {
-            line = next;
-        }
-    }
-
-    if (line) lines.push(line);
-    return lines.slice(0, 3);
+        .replace(/`/g, "\\`")
+        .replace(/\|/g, "\\|");
 }
 
 function createProjectTable(repositories) {
-    if (!repositories.length) {
+    if (repositories.length === 0) {
         return `
 <div align="center">
 
@@ -92,21 +80,22 @@ function createProjectTable(repositories) {
     return `
 <table>
 ${repositories.slice(0, 4).map((repo, index) => {
-        const descriptionLines = wrapDescription(repo.description);
-        const description = descriptionLines.join("\n");
+        const name = escapeText(repo.name);
+        const description = escapeText(
+            repo.description || "Personal project and experiment."
+        );
+        const language = escapeText(
+            repo.primaryLanguage?.name || "Code"
+        );
 
         return `<tr>
 <td>
 
-\`\`\`text
-$ ${index + 1}. ${escapeMarkdown(repo.name)}
+**\`$ ${index + 1}.\` [${name}](${repo.url})**
 
 ${description}
 
-${repo.primaryLanguage?.name || "Code"}   ★ ${repo.stargazerCount}   ⑂ ${repo.forkCount}
-\`\`\`
-
-**[→ View Repository](${repo.url})**
+\`${language}\` · ⭐ ${repo.stargazerCount} · ⑂ ${repo.forkCount}
 
 </td>
 </tr>`;
@@ -116,14 +105,21 @@ ${repo.primaryLanguage?.name || "Code"}   ★ ${repo.stargazerCount}   ⑂ ${rep
 
 function updateReadme(projectTable) {
     const readme = fs.readFileSync(README_FILE, "utf8");
+
     const start = readme.indexOf(START_MARKER);
     const end = readme.indexOf(END_MARKER);
 
     if (start === -1 || end === -1 || end < start) {
-        throw new Error("README project markers are missing or invalid.");
+        throw new Error(
+            "README project markers are missing or invalid."
+        );
     }
 
-    const before = readme.slice(0, start + START_MARKER.length);
+    const before = readme.slice(
+        0,
+        start + START_MARKER.length
+    );
+
     const after = readme.slice(end);
 
     fs.writeFileSync(
@@ -139,6 +135,10 @@ async function main() {
     const repositories = await getPinnedRepositories();
 
     console.log(`Found ${repositories.length} pinned repositories.`);
+
+    repositories.forEach((repo, index) => {
+        console.log(`${index + 1}. ${repo.name}`);
+    });
 
     updateReadme(createProjectTable(repositories));
 

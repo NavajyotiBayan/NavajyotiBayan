@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   update-readme:
+    name: Sync pinned repositories
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +22,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Sync pinned repositories
+      - name: Update featured projects
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node fetch_repos.js
