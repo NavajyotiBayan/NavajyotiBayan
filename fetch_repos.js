@@ -30,7 +30,7 @@ async function getPinnedRepositories() {
     const response = await fetch("https://api.github.com/graphql", {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${process.env.GITHUB_TOKEN}`,
+            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
             "Content-Type": "application/json",
             "User-Agent": "NavajyotiBayan-Profile-README"
         },
@@ -41,7 +41,9 @@ async function getPinnedRepositories() {
     });
 
     if (!response.ok) {
-        throw new Error(`GitHub API request failed: ${response.status} ${response.statusText}`);
+        throw new Error(
+            `GitHub API request failed: ${response.status} ${response.statusText}`
+        );
     }
 
     const result = await response.json();
@@ -56,7 +58,7 @@ async function getPinnedRepositories() {
     );
 }
 
-function escapeMarkdown(value = "") {
+function safe(value = "") {
     return String(value)
         .replace(/\\/g, "\\\\")
         .replace(/`/g, "\\`")
@@ -68,7 +70,7 @@ function createProjectTable(repositories) {
         return `
 <div align="center">
 
-\`No repositories are currently pinned on my GitHub profile.\`
+\`No repositories are currently pinned.\`
 
 </div>`;
     }
@@ -76,22 +78,24 @@ function createProjectTable(repositories) {
     return `
 <table>
 ${repositories.slice(0, 4).map((repo, index) => {
-        const name = escapeMarkdown(repo.name);
-        const description = escapeMarkdown(
+        const name = safe(repo.name);
+        const description = safe(
             repo.description || "Personal project and experiment."
         );
-        const language = escapeMarkdown(
+        const language = safe(
             repo.primaryLanguage?.name || "Code"
         );
 
         return `<tr>
 <td>
 
-**\`$ ${index + 1}.\` [${name}](${repo.url})**
+### \`> ${name}\`
 
 ${description}
 
-\`${language}\` · ⭐ ${repo.stargazerCount} · ⑂ ${repo.forkCount}
+\`${language}\` · \`★ ${repo.stargazerCount}\` · \`⑂ ${repo.forkCount}\`
+
+**[OPEN PROJECT →](${repo.url})**
 
 </td>
 </tr>`;
@@ -99,8 +103,9 @@ ${description}
 </table>`;
 }
 
-function updateReadme(projectTable) {
+function updateReadme(projects) {
     const readme = fs.readFileSync(README_FILE, "utf8");
+
     const start = readme.indexOf(START_MARKER);
     const end = readme.indexOf(END_MARKER);
 
@@ -113,7 +118,7 @@ function updateReadme(projectTable) {
 
     fs.writeFileSync(
         README_FILE,
-        `${before}\n\n${projectTable}\n\n${after}`,
+        `${before}\n\n${projects}\n\n${after}`,
         "utf8"
     );
 }
@@ -124,10 +129,6 @@ async function main() {
     const repositories = await getPinnedRepositories();
 
     console.log(`Found ${repositories.length} pinned repositories.`);
-
-    repositories.forEach((repo, index) => {
-        console.log(`${index + 1}. ${repo.name}`);
-    });
 
     updateReadme(createProjectTable(repositories));
 
