@@ -1,10 +1,7 @@
 const fs = require("fs");
 
 const USERNAME = "NavajyotiBayan";
-const README_FILE = "README.md";
-
-const START_MARKER = "<!-- AUTO-REPO-LIST:START -->";
-const END_MARKER = "<!-- AUTO-REPO-LIST:END -->";
+const SVG_FILE = "assets/profile-terminal.svg";
 
 const QUERY = `
 query($login: String!) {
@@ -17,10 +14,7 @@ query($login: String!) {
           url
           stargazerCount
           forkCount
-          primaryLanguage {
-            name
-          }
-          isArchived
+          primaryLanguage { name }
           isFork
         }
       }
@@ -39,16 +33,12 @@ async function getPinnedRepositories() {
         },
         body: JSON.stringify({
             query: QUERY,
-            variables: {
-                login: USERNAME
-            }
+            variables: { login: USERNAME }
         })
     });
 
     if (!response.ok) {
-        throw new Error(
-            `GitHub API request failed: ${response.status} ${response.statusText}`
-        );
+        throw new Error(`GitHub API request failed: ${response.status} ${response.statusText}`);
     }
 
     const result = await response.json();
@@ -58,126 +48,118 @@ async function getPinnedRepositories() {
         throw new Error("GitHub GraphQL returned an error.");
     }
 
-    return result.data.user.pinnedItems.nodes.filter(
-        repo => repo && !repo.isFork
-    );
+    return result.data.user.pinnedItems.nodes.filter(repo => repo && !repo.isFork);
 }
 
-function escapeHtml(text = "") {
-    return String(text)
+function esc(value = "") {
+    return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
 }
 
-function createProjectCards(repositories) {
-    if (repositories.length === 0) {
-        return `
-<div align="center">
+function wrapText(text, maxChars = 42, maxLines = 3) {
+    const words = String(text || "Personal project and experiment.").split(/\s+/);
+    const lines = [];
+    let line = "";
 
-\`No repositories are currently pinned on my GitHub profile.\`
-
-</div>
-`;
+    for (const word of words) {
+        const candidate = line ? `${line} ${word}` : word;
+        if (candidate.length > maxChars && line) {
+            lines.push(line);
+            line = word;
+        } else {
+            line = candidate;
+        }
     }
 
-    const cards = repositories.map((repo, index) => {
-        const description = escapeHtml(
-            repo.description || "Personal project and experiment."
-        );
+    if (line) lines.push(line);
+    return lines.slice(0, maxLines);
+}
 
-        const language = escapeHtml(
-            repo.primaryLanguage?.name || "Code"
-        );
-
-        const name = escapeHtml(repo.name);
-        const stars = repo.stargazerCount;
-        const forks = repo.forkCount;
-
-        return `
-<tr>
-<td width="50%" valign="top">
-
-<strong>$ ${index + 1}. <a href="${repo.url}">${name}</a></strong>
-
-<br><br>
-
-<code>${description}</code>
-
-<br><br>
-
-<code>${language}</code>
-&nbsp;·&nbsp;
-⭐ ${stars}
-&nbsp;·&nbsp;
-🍴 ${forks}
-
-<br><br>
-
-<a href="${repo.url}">→ View Repository</a>
-
-</td>
-</tr>
-`;
-    });
+function projectCard(repo, x, y, width, height, number) {
+    const lines = wrapText(repo.description);
+    const desc = lines.map((line, i) =>
+        `<text x="${x + 28}" y="${y + 88 + i * 20}" class="desc">${esc(line)}</text>`
+    ).join("");
 
     return `
-<table>
-${cards.join("\n")}
-</table>
-`;
+    <a href="${esc(repo.url)}" target="_blank">
+      <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="12" class="card"/>
+      <text x="${x + 28}" y="${y + 38}" class="prompt">$ ${number}.</text>
+      <text x="${x + 54}" y="${y + 38}" class="project">${esc(repo.name)}</text>
+      ${desc}
+      <text x="${x + 28}" y="${y + height - 28}" class="meta">${esc(repo.primaryLanguage?.name || "Code")}</text>
+      <text x="${x + width - 128}" y="${y + height - 28}" class="meta">★ ${repo.stargazerCount}</text>
+      <text x="${x + width - 68}" y="${y + height - 28}" class="meta">⑂ ${repo.forkCount}</text>
+    </a>`;
 }
 
-function updateReadme(content) {
-    const readme = fs.readFileSync(README_FILE, "utf8");
+function buildProjects(repositories) {
+    const positions = [
+        [585, 405],
+        [585, 625],
+        [585, 845],
+        [585, 1065]
+    ];
 
-    const startIndex = readme.indexOf(START_MARKER);
-    const endIndex = readme.indexOf(END_MARKER);
-
-    if (startIndex === -1 || endIndex === -1) {
-        throw new Error(
-            "README markers not found. Add AUTO-REPO-LIST markers first."
-        );
+    if (!repositories.length) {
+        return `
+        <rect x="585" y="405" width="555" height="185" rx="12" class="card"/>
+        <text x="613" y="490" class="desc">No pinned repositories found.</text>
+        <text x="613" y="530" class="meta">Pin repositories on GitHub to populate this panel.</text>`;
     }
 
-    if (endIndex < startIndex) {
-        throw new Error("README markers are in the wrong order.");
+    return repositories.slice(0, 4).map((repo, i) =>
+        projectCard(repo, positions[i][0], positions[i][1], 555, 185, i + 1)
+    ).join("\n");
+}
+
+function updateSvg(repositories) {
+    let svg = fs.readFileSync(SVG_FILE, "utf8");
+
+    const start = svg.indexOf("<!-- AUTO_PROJECTS_START -->");
+    const end = svg.indexOf("<!-- AUTO_PROJECTS_END -->");
+
+    if (start !== -1 && end !== -1) {
+        const replacement = `<!-- AUTO_PROJECTS_START -->\n${buildProjects(repositories)}\n<!-- AUTO_PROJECTS_END -->`;
+        svg = svg.slice(0, start) + replacement + svg.slice(end + "<!-- AUTO_PROJECTS_END -->".length);
+        fs.writeFileSync(SVG_FILE, svg, "utf8");
+        return;
     }
 
-    const before = readme.slice(
-        0,
-        startIndex + START_MARKER.length
-    );
+    // Initial template uses the project area directly; replace the card region
+    // between the project heading and the bottom learning section.
+    const projectHeading = '<text x="850" y="308" class="command">ls ~/featured-projects</text>';
+    const bottomLine = '<!-- bottom learning process -->';
 
-    const after = readme.slice(endIndex);
+    const start2 = svg.indexOf(projectHeading);
+    const end2 = svg.indexOf(bottomLine);
 
-    const updatedReadme =
-        `${before}\n\n${content}\n\n${after}`;
+    if (start2 === -1 || end2 === -1) {
+        throw new Error("Could not locate project section in profile-terminal.svg.");
+    }
 
-    fs.writeFileSync(
-        README_FILE,
-        updatedReadme,
-        "utf8"
-    );
+    const before = svg.slice(0, start2 + projectHeading.length);
+    const after = svg.slice(end2);
+
+    svg = `${before}\n<!-- AUTO_PROJECTS_START -->\n${buildProjects(repositories)}\n<!-- AUTO_PROJECTS_END -->\n\n${after}`;
+    fs.writeFileSync(SVG_FILE, svg, "utf8");
 }
 
 async function main() {
     console.log(`Fetching pinned repositories for ${USERNAME}...`);
-
     const repositories = await getPinnedRepositories();
-
     console.log(`Found ${repositories.length} pinned repositories.`);
 
     repositories.forEach((repo, index) => {
         console.log(`${index + 1}. ${repo.name}`);
     });
 
-    const projectCards = createProjectCards(repositories);
-
-    updateReadme(projectCards);
-
-    console.log("README.md updated successfully.");
+    updateSvg(repositories);
+    console.log(`${SVG_FILE} updated successfully.`);
 }
 
 main().catch(error => {
