@@ -17,9 +17,7 @@ query($login: String!) {
           url
           stargazerCount
           forkCount
-          primaryLanguage {
-            name
-          }
+          primaryLanguage { name }
           isFork
         }
       }
@@ -43,9 +41,7 @@ async function getPinnedRepositories() {
     });
 
     if (!response.ok) {
-        throw new Error(
-            `GitHub API request failed: ${response.status} ${response.statusText}`
-        );
+        throw new Error(`GitHub API request failed: ${response.status} ${response.statusText}`);
     }
 
     const result = await response.json();
@@ -60,7 +56,7 @@ async function getPinnedRepositories() {
     );
 }
 
-function escapeText(value = "") {
+function escapeMarkdown(value = "") {
     return String(value)
         .replace(/\\/g, "\\\\")
         .replace(/`/g, "\\`")
@@ -68,7 +64,7 @@ function escapeText(value = "") {
 }
 
 function createProjectTable(repositories) {
-    if (repositories.length === 0) {
+    if (!repositories.length) {
         return `
 <div align="center">
 
@@ -80,11 +76,11 @@ function createProjectTable(repositories) {
     return `
 <table>
 ${repositories.slice(0, 4).map((repo, index) => {
-        const name = escapeText(repo.name);
-        const description = escapeText(
+        const name = escapeMarkdown(repo.name);
+        const description = escapeMarkdown(
             repo.description || "Personal project and experiment."
         );
-        const language = escapeText(
+        const language = escapeMarkdown(
             repo.primaryLanguage?.name || "Code"
         );
 
@@ -105,21 +101,14 @@ ${description}
 
 function updateReadme(projectTable) {
     const readme = fs.readFileSync(README_FILE, "utf8");
-
     const start = readme.indexOf(START_MARKER);
     const end = readme.indexOf(END_MARKER);
 
     if (start === -1 || end === -1 || end < start) {
-        throw new Error(
-            "README project markers are missing or invalid."
-        );
+        throw new Error("README project markers are missing or invalid.");
     }
 
-    const before = readme.slice(
-        0,
-        start + START_MARKER.length
-    );
-
+    const before = readme.slice(0, start + START_MARKER.length);
     const after = readme.slice(end);
 
     fs.writeFileSync(
