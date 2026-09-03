@@ -27,7 +27,7 @@ jobs:
       - name: Update featured projects
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node fetch_repos.js
+        run: node fetch.js
 
       - name: Commit README changes
         run: |
