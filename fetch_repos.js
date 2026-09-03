@@ -64,10 +64,11 @@ async function getPinnedRepositories() {
 }
 
 function escapeHtml(text = "") {
-    return text
+    return String(text)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
 }
 
 function createProjectCards(repositories) {
@@ -75,54 +76,55 @@ function createProjectCards(repositories) {
         return `
 <div align="center">
 
-_No repositories are currently pinned on my GitHub profile._
+\`No repositories are currently pinned on my GitHub profile.\`
 
 </div>
 `;
     }
 
     const cards = repositories.map((repo, index) => {
-        const description =
-            escapeHtml(repo.description || "Personal project and experiment.");
+        const description = escapeHtml(
+            repo.description || "Personal project and experiment."
+        );
 
-        const language =
-            repo.primaryLanguage?.name || "Code";
+        const language = escapeHtml(
+            repo.primaryLanguage?.name || "Code"
+        );
 
+        const name = escapeHtml(repo.name);
         const stars = repo.stargazerCount;
         const forks = repo.forkCount;
 
         return `
+<tr>
 <td width="50%" valign="top">
 
-### 📦 [${escapeHtml(repo.name)}](${repo.url})
+<strong>$ ${index + 1}. <a href="${repo.url}">${name}</a></strong>
 
-${description}
+<br><br>
 
-\`${language}\` · ⭐ ${stars} · 🍴 ${forks}
+<code>${description}</code>
+
+<br><br>
+
+<code>${language}</code>
+&nbsp;·&nbsp;
+⭐ ${stars}
+&nbsp;·&nbsp;
+🍴 ${forks}
+
+<br><br>
+
+<a href="${repo.url}">→ View Repository</a>
 
 </td>
+</tr>
 `;
     });
 
-    const rows = [];
-
-    for (let i = 0; i < cards.length; i += 2) {
-        const left = cards[i];
-        const right = cards[i + 1] || `
-<td width="50%" valign="top"></td>
-`;
-
-        rows.push(`
-<tr>
-${left}
-${right}
-</tr>
-`);
-    }
-
     return `
 <table>
-${rows.join("\n")}
+${cards.join("\n")}
 </table>
 `;
 }
