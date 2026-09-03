@@ -35,9 +35,9 @@
 <tr>
 <td width="50%" valign="top">
 
-**<a href="https://github.com/NavajyotiBayan/G-Takeout-Tools">[01] G-Takeout-Tools</a>**
+**<a href="https://github.com/NavajyotiBayan/IDM-Tool">[01] IDM-Tool</a>**
 
-Modern Windows 11 utility for fixing Google Takeout media timestamps
+No description provided.
 
 <sub>`PowerShell`</sub>
 
@@ -46,11 +46,11 @@ Modern Windows 11 utility for fixing Google Takeout media timestamps
 </td>
 <td width="50%" valign="top">
 
-**<a href="https://github.com/NavajyotiBayan/IDM-Tool">[02] IDM-Tool</a>**
+**<a href="https://github.com/NavajyotiBayan/MIMI-Baby-Studio">[02] MIMI-Baby-Studio</a>**
 
-No description provided.
+Private, local Windows productivity studio for converting videos and images into PDF documents
 
-<sub>`PowerShell`</sub>
+<sub>`JavaScript`</sub>
 
 ⭐ 0 &nbsp;·&nbsp; 🍴 0
 
@@ -58,11 +58,11 @@ No description provided.
 <tr>
 <td width="50%" valign="top">
 
-**<a href="https://github.com/NavajyotiBayan/MIMI-Baby-Studio">[03] MIMI-Baby-Studio</a>**
+**<a href="https://github.com/NavajyotiBayan/PhotoChronicle">[03] PhotoChronicle</a>**
 
-Private, local Windows productivity studio for converting videos and images into PDF documents
+Google Takeout photo organizer for restoring timestamps and organizing your media.
 
-<sub>`JavaScript`</sub>
+<sub>`Python`</sub>
 
 ⭐ 0 &nbsp;·&nbsp; 🍴 0
 
