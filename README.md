@@ -77,16 +77,16 @@ Private, local Windows productivity studio for converting videos and images into
 
 ---
 
-## ⚡ What I'm Exploring
 
-<div align="center">
-
-`AI` · `Vibe Coding` · `PowerShell` · `Windows`  
-`Automation` · `WPF` · `XAML` · `UI/UX` · `Desktop Tools`
-
-</div>
-
-I'm particularly interested in **AI-assisted development** — using AI not only to generate code, but also to understand unfamiliar technologies, troubleshoot problems, and turn ideas into working software.
+<p align="center">
+  <picture>
+    <img
+      src="./assets/What I'm Exploring.png"
+      alt="What I'm Exploring"
+      width="100%"
+    >
+  </picture>
+</p>
 
 ---
 
@@ -96,7 +96,7 @@ I'm particularly interested in **AI-assisted development** — using AI not only
   <picture>
     <img
       src="./assets/learning-process.png"
-      alt="About Me"
+      alt="How I Learn"
       width="100%"
     >
   </picture>
