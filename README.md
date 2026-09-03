@@ -15,15 +15,13 @@
 
 ## 🧭 About Me
 
-I'm a **whiteboard explainer freelancer** with a background in **Political Science** who developed a strong interest in computers, AI, and technology.
-
-I'm not a formally trained software developer. I learn by **researching, experimenting, using AI as a coding partner, and building practical tools for problems I encounter myself**.
-
-Most of my projects start with a simple question:
-
-> **"Can I build something that makes this easier?"**
-
-My GitHub is a collection of those experiments, tools, and things I'm learning along the way.
+<p align="center">
+  <img
+    src="./assets/about-me.png"
+    alt="About Me"
+    width="900"
+  >
+</p>
 
 ---
 
