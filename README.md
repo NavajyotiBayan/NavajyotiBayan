@@ -35,7 +35,18 @@
 <tr>
 <td width="50%" valign="top">
 
-**<a href="https://github.com/NavajyotiBayan/IDM-Tool">[01] IDM-Tool</a>**
+**<a href="https://github.com/NavajyotiBayan/PhotoChronicle">[01] PhotoChronicle</a>**
+
+Google Takeout photo organizer for restoring timestamps and organizing your media.
+
+<sub>`Python`</sub>
+
+⭐ 0 &nbsp;·&nbsp; 🍴 0
+
+</td>
+<td width="50%" valign="top">
+
+**<a href="https://github.com/NavajyotiBayan/IDM-Tool">[02] IDM-Tool</a>**
 
 No description provided.
 
@@ -43,26 +54,15 @@ No description provided.
 
 ⭐ 0 &nbsp;·&nbsp; 🍴 0
 
-</td>
-<td width="50%" valign="top">
-
-**<a href="https://github.com/NavajyotiBayan/MIMI-Baby-Studio">[02] MIMI-Baby-Studio</a>**
-
-Private, local Windows productivity studio for converting videos and images into PDF documents
-
-<sub>`JavaScript`</sub>
-
-⭐ 0 &nbsp;·&nbsp; 🍴 0
-
 </td></tr>
 <tr>
 <td width="50%" valign="top">
 
-**<a href="https://github.com/NavajyotiBayan/PhotoChronicle">[03] PhotoChronicle</a>**
+**<a href="https://github.com/NavajyotiBayan/MIMI-Baby-Studio">[03] MIMI-Baby-Studio</a>**
 
-Google Takeout photo organizer for restoring timestamps and organizing your media.
+Private, local Windows productivity studio for converting videos and images into PDF documents
 
-<sub>`Python`</sub>
+<sub>`JavaScript`</sub>
 
 ⭐ 0 &nbsp;·&nbsp; 🍴 0
 
