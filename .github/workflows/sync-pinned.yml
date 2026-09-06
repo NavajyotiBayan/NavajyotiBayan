@@ -1,0 +1,126 @@
+name: Sync Pinned Projects
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout profile
+        uses: actions/checkout@v4
+
+      - name: Generate pinned projects
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: NavajyotiBayan
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          from pathlib import Path
+
+          username = os.environ["USERNAME"]
+
+          query = """
+          query($login: String!) {
+            user(login: $login) {
+              pinnedItems(first: 6, types: REPOSITORY) {
+                nodes {
+                  ... on Repository {
+                    name
+                    description
+                    url
+                    primaryLanguage { name }
+                    stargazerCount
+                    forkCount
+                  }
+                }
+              }
+            }
+          }
+          """
+
+          result = subprocess.run(
+              [
+                  "gh", "api", "graphql",
+                  "-f", f"query={query}",
+                  "-f", f"login={username}"
+              ],
+              check=True,
+              capture_output=True,
+              text=True
+          )
+
+          data = json.loads(result.stdout)
+          repos = data["data"]["user"]["pinnedItems"]["nodes"]
+
+          cards = []
+
+          for repo in repos:
+              name = repo["name"]
+              description = repo["description"] or "No description provided."
+              language = (repo["primaryLanguage"] or {}).get("name", "Code")
+              stars = repo["stargazerCount"]
+              forks = repo["forkCount"]
+              url = repo["url"]
+
+              cards.append(
+                  f"""<details>
+          <summary><b>{name}</b> · {language}</summary>
+
+          {description}
+
+          ⭐ {stars} &nbsp; · &nbsp; 🍴 {forks} &nbsp; · &nbsp; [View repository →]({url})
+
+          </details>"""
+              )
+
+          if not cards:
+              generated = "_No pinned repositories yet._"
+          else:
+              generated = "\n\n".join(cards)
+
+          readme_path = Path("README.md")
+          text = readme_path.read_text(encoding="utf-8")
+
+          start = "<!-- PINNED:START -->"
+          end = "<!-- PINNED:END -->"
+
+          before = text.split(start, 1)[0]
+          after = text.split(end, 1)[1]
+
+          replacement = (
+              f"{start}\n"
+              f"<!-- Automatically generated from GitHub pinned repositories. -->\n\n"
+              f"{generated}\n\n"
+              f"{end}"
+          )
+
+          readme_path.write_text(
+              before + replacement + after,
+              encoding="utf-8"
+          )
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+
+          if git diff --cached --quiet; then
+            echo "Pinned projects are already up to date."
+            exit 0
+          fi
+
+          git commit -m "chore: sync pinned projects"
+          git push
