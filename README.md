@@ -30,7 +30,7 @@ My interest in computers, technology and AI gradually turned into a habit:
 problem → "can I solve this?" → learn → experiment → build
 ```
 
-I don't come from a traditional computer-science path.  
+I don't come from a traditional computer-science path.
 I'm **self-taught**, and I use AI as a coding partner while learning by building things that are actually useful to me.
 
 **That's what I call vibe coding.**
@@ -40,7 +40,34 @@ I'm **self-taught**, and I use AI as a coding partner while learning by building
 ## `> pinned_projects`
 
 <!-- PINNED:START -->
-<!-- This section is automatically updated from your GitHub pinned repositories. -->
+<!-- Automatically generated from your GitHub pinned repositories. -->
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+### 🟢 Project
+
+**Loading pinned repository...**
+
+</td>
+<td width="33%" valign="top">
+
+### 🟢 Project
+
+**Loading pinned repository...**
+
+</td>
+<td width="33%" valign="top">
+
+### 🟢 Project
+
+**Loading pinned repository...**
+
+</td>
+</tr>
+</table>
+
 <!-- PINNED:END -->
 
 ---

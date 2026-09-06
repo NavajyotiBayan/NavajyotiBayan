@@ -1,8 +1,10 @@
 name: Sync Pinned Projects
 
 on:
+  # Runs every midnight in India (IST = UTC+5:30).
+  # 18:30 UTC = 00:00 IST.
   schedule:
-    - cron: "17 */6 * * *"
+    - cron: "30 18 * * *"
   workflow_dispatch:
 
 permissions:
@@ -13,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout profile
+      - name: Checkout profile repository
         uses: actions/checkout@v4
 
-      - name: Generate pinned projects
+      - name: Generate pinned project cards
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: NavajyotiBayan
@@ -26,6 +28,7 @@ jobs:
           import os
           import subprocess
           from pathlib import Path
+          from html import escape
 
           username = os.environ["USERNAME"]
 
@@ -41,6 +44,8 @@ jobs:
                     primaryLanguage { name }
                     stargazerCount
                     forkCount
+                    isPrivate
+                    isArchived
                   }
                 }
               }
@@ -62,31 +67,63 @@ jobs:
           data = json.loads(result.stdout)
           repos = data["data"]["user"]["pinnedItems"]["nodes"]
 
+          # GitHub profiles can pin up to six repositories.
+          # Render them as a 3-column HTML table for a card-like layout.
           cards = []
 
           for repo in repos:
-              name = repo["name"]
-              description = repo["description"] or "No description provided."
-              language = (repo["primaryLanguage"] or {}).get("name", "Code")
+              name = escape(repo["name"])
+              description = escape(repo["description"] or "A project by Navajyoti Bayan.")
+              url = escape(repo["url"], quote=True)
+              language = escape((repo["primaryLanguage"] or {}).get("name", "Code"))
               stars = repo["stargazerCount"]
               forks = repo["forkCount"]
-              url = repo["url"]
 
-              cards.append(
-                  f"""<details>
-          <summary><b>{name}</b> · {language}</summary>
+              archived = " · Archived" if repo["isArchived"] else ""
 
-          {description}
+              card = f"""
+          <td width="33%" valign="top">
 
-          ⭐ {stars} &nbsp; · &nbsp; 🍴 {forks} &nbsp; · &nbsp; [View repository →]({url})
+          <h3>▣ {name}</h3>
 
-          </details>"""
-              )
+          <p>{description}</p>
+
+          <p>
+          <code>{language}</code>
+          </p>
+
+          <p>
+          ⭐ {stars} &nbsp; · &nbsp; 🍴 {forks}{archived}
+          </p>
+
+          <p>
+          <a href="{url}"><b>View repository →</b></a>
+          </p>
+
+          </td>
+          """
+
+              cards.append(card)
 
           if not cards:
-              generated = "_No pinned repositories yet._"
+              generated = """
+          <table>
+          <tr>
+          <td align="center">
+          <b>No pinned repositories yet.</b>
+          </td>
+          </tr>
+          </table>
+          """
           else:
-              generated = "\n\n".join(cards)
+              rows = []
+              for i in range(0, len(cards), 3):
+                  row = cards[i:i + 3]
+                  while len(row) < 3:
+                      row.append('<td width="33%" valign="top"></td>')
+                  rows.append("<tr>\n" + "\n".join(row) + "\n</tr>")
+
+              generated = "<table>\n" + "\n".join(rows) + "\n</table>"
 
           readme_path = Path("README.md")
           text = readme_path.read_text(encoding="utf-8")
@@ -94,12 +131,15 @@ jobs:
           start = "<!-- PINNED:START -->"
           end = "<!-- PINNED:END -->"
 
+          if start not in text or end not in text:
+              raise SystemExit("Pinned project markers were not found in README.md")
+
           before = text.split(start, 1)[0]
           after = text.split(end, 1)[1]
 
           replacement = (
               f"{start}\n"
-              f"<!-- Automatically generated from GitHub pinned repositories. -->\n\n"
+              f"<!-- Automatically generated from your GitHub pinned repositories. -->\n\n"
               f"{generated}\n\n"
               f"{end}"
           )
@@ -110,7 +150,7 @@ jobs:
           )
           PY
 
-      - name: Commit changes
+      - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -122,5 +162,5 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: sync pinned projects"
+          git commit -m "chore: sync pinned project cards"
           git push
