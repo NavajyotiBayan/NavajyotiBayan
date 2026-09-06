@@ -40,73 +40,100 @@ I'm **self-taught**, and I use AI as a coding partner while learning by building
 ## `> pinned_projects`
 
 <!-- PINNED:START -->
-<<<<<<< HEAD
 <!-- Automatically generated from your GitHub pinned repositories. -->
 
 <table>
 <tr>
+
 <td width="33%" valign="top">
 
-### 🟢 Project
+<h3>▣ NobiDownloader</h3>
 
-**Loading pinned repository...**
+<p>Locally running web app for downloading supported online media as video or MP3 using</p>
+
+<p>
+<code>Python</code>
+</p>
+
+<p>
+⭐ 0 &nbsp; · &nbsp; 🍴 0
+</p>
+
+<p>
+<a href="https://github.com/NavajyotiBayan/NobiDownloader"><b>View repository →</b></a>
+</p>
 
 </td>
+
+
 <td width="33%" valign="top">
 
-### 🟢 Project
+<h3>▣ PhotoChronicle</h3>
 
-**Loading pinned repository...**
+<p>Google Takeout photo organizer for restoring timestamps and organizing your media.</p>
+
+<p>
+<code>Python</code>
+</p>
+
+<p>
+⭐ 0 &nbsp; · &nbsp; 🍴 0
+</p>
+
+<p>
+<a href="https://github.com/NavajyotiBayan/PhotoChronicle"><b>View repository →</b></a>
+</p>
 
 </td>
+
+
 <td width="33%" valign="top">
 
-### 🟢 Project
+<h3>▣ IDM-Tool</h3>
 
-**Loading pinned repository...**
+<p>A project by Navajyoti Bayan.</p>
+
+<p>
+<code>PowerShell</code>
+</p>
+
+<p>
+⭐ 0 &nbsp; · &nbsp; 🍴 0
+</p>
+
+<p>
+<a href="https://github.com/NavajyotiBayan/IDM-Tool"><b>View repository →</b></a>
+</p>
 
 </td>
+
+</tr>
+<tr>
+
+<td width="33%" valign="top">
+
+<h3>▣ MIMI-Baby-Studio</h3>
+
+<p>Private, local Windows productivity studio for converting videos and images into PDF documents</p>
+
+<p>
+<code>JavaScript</code>
+</p>
+
+<p>
+⭐ 0 &nbsp; · &nbsp; 🍴 0
+</p>
+
+<p>
+<a href="https://github.com/NavajyotiBayan/MIMI-Baby-Studio"><b>View repository →</b></a>
+</p>
+
+</td>
+
+<td width="33%" valign="top"></td>
+<td width="33%" valign="top"></td>
 </tr>
 </table>
-=======
-<!-- Automatically generated from GitHub pinned repositories. -->
-
-<details>
-<summary><b>NobiDownloader</b> · Python</summary>
-
-Locally running web app for downloading supported online media as video or MP3 using
-
-⭐ 0 &nbsp; · &nbsp; 🍴 0 &nbsp; · &nbsp; [View repository →](https://github.com/NavajyotiBayan/NobiDownloader)
-
-</details>
-
-<details>
-<summary><b>PhotoChronicle</b> · Python</summary>
-
-Google Takeout photo organizer for restoring timestamps and organizing your media.
-
-⭐ 0 &nbsp; · &nbsp; 🍴 0 &nbsp; · &nbsp; [View repository →](https://github.com/NavajyotiBayan/PhotoChronicle)
-
-</details>
-
-<details>
-<summary><b>IDM-Tool</b> · PowerShell</summary>
-
-No description provided.
-
-⭐ 0 &nbsp; · &nbsp; 🍴 0 &nbsp; · &nbsp; [View repository →](https://github.com/NavajyotiBayan/IDM-Tool)
-
-</details>
-
-<details>
-<summary><b>MIMI-Baby-Studio</b> · JavaScript</summary>
-
-Private, local Windows productivity studio for converting videos and images into PDF documents
-
-⭐ 0 &nbsp; · &nbsp; 🍴 0 &nbsp; · &nbsp; [View repository →](https://github.com/NavajyotiBayan/MIMI-Baby-Studio)
-
-</details>
->>>>>>> c0c1ffcf0e60a419a3459a041a8d8377004288bf
 
 <!-- PINNED:END -->
 
