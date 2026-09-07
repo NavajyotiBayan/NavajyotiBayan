@@ -49,7 +49,7 @@ I'm **self-taught**, and I use AI as a coding partner while learning by building
 
 <h3>▣ NobiDownloader</h3>
 
-<p>Locally running web app for downloading supported online media as video or MP3 using</p>
+<p>Free, open-source Windows desktop app for downloading supported online media as video or MP3</p>
 
 <p>
 <code>Python</code>
@@ -107,31 +107,6 @@ I'm **self-taught**, and I use AI as a coding partner while learning by building
 
 </td>
 
-</tr>
-<tr>
-
-<td width="33%" valign="top">
-
-<h3>▣ MIMI-Baby-Studio</h3>
-
-<p>Private, local Windows productivity studio for converting videos and images into PDF documents</p>
-
-<p>
-<code>JavaScript</code>
-</p>
-
-<p>
-⭐ 0 &nbsp; · &nbsp; 🍴 0
-</p>
-
-<p>
-<a href="https://github.com/NavajyotiBayan/MIMI-Baby-Studio"><b>View repository →</b></a>
-</p>
-
-</td>
-
-<td width="33%" valign="top"></td>
-<td width="33%" valign="top"></td>
 </tr>
 </table>
 
